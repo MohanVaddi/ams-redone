@@ -1,1 +1,1 @@
-# complete-mern-authentication-template
+# ams-redone

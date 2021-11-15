@@ -1,0 +1,42 @@
+{
+    "name": "connect-app",
+    "description": "A minimal social network!",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+        "build": "rm -rf build/ && tsc",
+        "start": "build/index.js"
+    },
+    "author": "Mohan Vaddi <myselfgeek01@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^0.23.0",
+        "bcryptjs": "^2.4.3",
+        "config": "^3.3.6",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "express-validator": "^6.13.0",
+        "gravatar": "^1.8.2",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.0.11"
+    },
+    "devDependencies": {
+        "@types/axios": "^0.14.0",
+        "@types/bcryptjs": "^2.4.2",
+        "@types/config": "^0.0.39",
+        "@types/cors": "^2.8.12",
+        "@types/dotenv": "^8.2.0",
+        "@types/express": "^4.17.13",
+        "@types/express-validator": "^3.0.0",
+        "@types/gravatar": "^1.8.3",
+        "@types/jsonwebtoken": "^8.5.5",
+        "@types/mongoose": "^5.11.97",
+        "@types/node": "^16.11.1",
+        "concurrently": "^6.3.0",
+        "cors": "^2.8.5",
+        "ts-node": "^10.3.0",
+        "ts-node-dev": "^1.1.8",
+        "typescript": "^4.4.4"
+    }
+}

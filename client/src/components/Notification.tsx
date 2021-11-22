@@ -21,7 +21,7 @@ export const Notification = ({ msg, type }: NotificationProps) => {
                 textAlign='center'
                 backgroundColor={infoColor}
                 color={fontColor}>
-                <Text fontSize={['lg', '2xl']} fontWeight='500'>
+                <Text fontSize={['lg', 'xl']} fontWeight='500'>
                     {msg}
                 </Text>
             </Box>,
@@ -35,14 +35,13 @@ export const Notification = ({ msg, type }: NotificationProps) => {
                 textAlign='center'
                 backgroundColor={successColor}
                 color={fontColor}>
-                <Text fontSize={['lg', '2xl']} fontWeight='500'>
+                <Text fontSize={['lg', 'xl']} fontWeight='500'>
                     {msg}
                 </Text>
             </Box>,
             document.getElementById('notification-root') as HTMLElement
         );
-    }
-    if (type === 'error') {
+    } else {
         return ReactDom.createPortal(
             <Box
                 w='full'
@@ -50,7 +49,7 @@ export const Notification = ({ msg, type }: NotificationProps) => {
                 textAlign='center'
                 backgroundColor={errorColor}
                 color={fontColor}>
-                <Text fontSize={['lg', '2xl']} fontWeight='500'>
+                <Text fontSize={['lg', 'xl']} fontWeight='500'>
                     {msg}
                 </Text>
             </Box>,

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import theme from './theme/index';
+import { ColorModeScript } from '@chakra-ui/react';
 import '@fontsource/montserrat';
 import '@fontsource/inter';
 import 'focus-visible/dist/focus-visible';
@@ -14,6 +15,9 @@ ReactDOM.render(
         <BrowserRouter>
             <ChakraProvider theme={theme}>
                 <React.StrictMode>
+                    <ColorModeScript
+                        initialColorMode={theme.config.initialColorMode}
+                    />
                     <App />
                 </React.StrictMode>
             </ChakraProvider>

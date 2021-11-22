@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import AppContext from '../context/AppContext';
+import {Link} from 'react-router-dom';
 
 // const NavLink = ({ children }: { children: ReactNode }) => (
 //     <Link
@@ -102,12 +103,20 @@ export const Header: React.FC<HeaderProps> = (props) => {
                                     <Center>
                                         <VStack spacing={2}>
                                             <p>{state.user.name}</p>
-                                            <p>{state.user.role.toLocaleUpperCase()}</p>
+                                            <p>
+                                                {state.user.role.toLocaleUpperCase()}
+                                            </p>
                                         </VStack>
                                     </Center>
                                     <br />
                                     <MenuDivider />
                                     {/* <MenuItem>Your Servers</MenuItem> */}
+                                    {state.user.role === 'faculty' && (
+                                        <>
+                                        <MenuItem as={Link} to='/facultyHome'>Home</MenuItem>
+                                        <MenuItem as={Link} to='/facultyUpdate'>Update Attendance</MenuItem>
+                                        </>
+                                    )}
                                     <MenuItem>Account Settings</MenuItem>
                                     <MenuItem onClick={logoutHandler}>
                                         Logout

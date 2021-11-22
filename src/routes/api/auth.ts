@@ -40,7 +40,7 @@ router.get('/', authMiddleware, async (req: any | Request, res: Response) => {
 
 /*
 @route    POST api/auth
-@desc     Authenticate User login and get Auth token
+@desc     Authenticate User login and return Auth token
 @access   Public 
 */
 router.post(

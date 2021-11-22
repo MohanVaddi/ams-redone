@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import axios, { AxiosResponse } from 'axios';
 import AppContext from '../context/AppContext';
 import { LoadingModal } from '../components/LoadingModal';
+import { Notification } from './../components/Notification';
 const MotionButton = motion<ButtonProps>(Button);
 
 interface LoginResponseInterface extends AxiosResponse {
@@ -38,23 +39,34 @@ export const Login: React.FC = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwdRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(false);
 
     const ctx = useContext(AppContext);
 
     const isTokenValid = useMemo(async (): Promise<
-        isValidTokenInterface | false
+        isValidTokenInterface | false | null
     > => {
         const accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-            const isValidResp: AxiosResponse<isValidTokenResponseInterface> =
-                await axios.get('http://localhost:4000/api/auth', {
-                    headers: {
-                        'x-auth-token': `${accessToken}`,
-                    },
-                });
-            return { ...isValidResp.data, token: accessToken };
+        try {
+            if (accessToken) {
+                // const act = 'xyx';
+                const isValidResp: AxiosResponse<isValidTokenResponseInterface> =
+                    await axios.get('http://localhost:4000/api/auth', {
+                        headers: {
+                            'x-auth-token': `${accessToken}`,
+                        },
+                    });
+                if (isValidResp.data.isValid) {
+                    return { ...isValidResp.data, token: accessToken };
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        } catch (error) {
+            console.log(error);
+            return null;
         }
-        return false;
     }, []);
 
     useEffect(() => {
@@ -73,11 +85,14 @@ export const Login: React.FC = () => {
                     payload: payload,
                 });
                 setIsLoading(false);
-            } else {
+            } else if (isValidToken === false) {
                 ctx.dispatch({
                     type: 'SET_LOGGEDIN',
                     payload: false,
                 });
+                setIsLoading(false);
+            } else {
+                setError(true);
                 setIsLoading(false);
             }
         })();
@@ -108,10 +123,11 @@ export const Login: React.FC = () => {
                     },
                 });
             } else {
-                console.log('Authentication failed');
+                throw new Error('Invalid Credentials');
             }
         } catch (err) {
             console.log(err);
+            setError(true);
         }
     };
 
@@ -127,43 +143,52 @@ export const Login: React.FC = () => {
         return <Redirect to='/adminHome' />;
     } else {
         return (
-            <Flex minH={'100vh'} align={'flex-start'} justify={'center'}>
-                <form onSubmit={onLoginHandler}>
-                    <Stack spacing={5} marginTop={24} w='sm'>
-                        <FormControl id='email'>
-                            <FormLabel>Email</FormLabel>
-                            <InputGroup>
-                                <InputLeftElement children={<EmailIcon />} />
-                                <Input
-                                    // variant='flushed'
-                                    ref={emailRef}
-                                    type='email'
-                                    isRequired
-                                />
-                            </InputGroup>
-                        </FormControl>
-                        <FormControl id='password'>
-                            <FormLabel>Password</FormLabel>
-                            <InputGroup>
-                                <InputLeftElement children={<UnlockIcon />} />
-                                <Input
-                                    // variant='flushed'
-                                    ref={passwdRef}
-                                    type='password'
-                                    isRequired
-                                />
-                            </InputGroup>
-                        </FormControl>
-                        <MotionButton
-                            type='submit'
-                            variant='primary'
-                            whileHover={{ scale: 1.01 }}
-                            whileTap={{ scale: 0.99 }}>
-                            Login
-                        </MotionButton>
-                    </Stack>
-                </form>
-            </Flex>
+            <>
+                {error && (
+                    <Notification msg='Invalid Credentials' type='error' />
+                )}
+                <Flex minH={'100vh'} align={'flex-start'} justify={'center'}>
+                    <form onSubmit={onLoginHandler}>
+                        <Stack spacing={5} marginTop={24} w='sm'>
+                            <FormControl id='email'>
+                                <FormLabel>Email</FormLabel>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        children={<EmailIcon />}
+                                    />
+                                    <Input
+                                        // variant='flushed'
+                                        ref={emailRef}
+                                        type='email'
+                                        isRequired
+                                    />
+                                </InputGroup>
+                            </FormControl>
+                            <FormControl id='password'>
+                                <FormLabel>Password</FormLabel>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        children={<UnlockIcon />}
+                                    />
+                                    <Input
+                                        // variant='flushed'
+                                        ref={passwdRef}
+                                        type='password'
+                                        isRequired
+                                    />
+                                </InputGroup>
+                            </FormControl>
+                            <MotionButton
+                                type='submit'
+                                variant='primary'
+                                whileHover={{ scale: 1.01 }}
+                                whileTap={{ scale: 0.99 }}>
+                                Login
+                            </MotionButton>
+                        </Stack>
+                    </form>
+                </Flex>
+            </>
         );
     }
 };
